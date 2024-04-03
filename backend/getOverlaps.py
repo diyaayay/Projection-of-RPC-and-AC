@@ -24,7 +24,7 @@ def find_simultaneous_ring(path, initial_times, intervals, end_time):
     time_format = "%Y-%m-%d %H:%M"
     end_time = datetime.strptime(end_time, time_format)
     times = [datetime.strptime(time_str, time_format) for time_str in initial_times]
-    occurrences = [] 
+    occurrences = []
 
     while all(time < end_time for time in times):
         if all(time == times[0] for time in times):
@@ -75,5 +75,4 @@ def get_res(endTime):
                 ),
             }
         )
-    print(res)
     return res
