@@ -1,0 +1,119 @@
+{
+    "assigned": false,
+    "id": "c84cf908-4c47-439e-ac00-fc2e4e352398",
+    "name": "TestPolicy",
+    "protections": [
+        {
+            "id": "99b84774-c598-4b73-a682-1584b1d8fdbf",
+            "schedules": [
+                {
+                    "scheduleId": 1,
+                    "name": "Array_Snapshot_1",
+                    "schedule": {
+                        "activeTime": {
+                            "activeFromTime": "02:00",
+                            "activeUntilTime": "23:59"
+                        },
+                        "recurrence": "HOURLY",
+                        "repeatInterval": {
+                            "every": 4
+                        }
+                    },
+                    "expireAfter": {
+                        "unit": "DAYS",
+                        "value": 1
+                    },
+                    "namePattern": {
+                        "format": "Array_Snapshot_{DateFormat}"
+                    }
+                }
+            ],
+            "type": "SNAPSHOT",
+            "applicationType": "VMWARE"
+        },
+        {
+            "id": "47575164-4756-4669-b293-5547de01aef5",
+            "schedules": [
+                {
+                    "scheduleId": 2,
+                    "sourceProtectionScheduleId": 1,
+                    "name": "On-Premises_Protection_Store_4",
+                    "schedule": {
+                        "recurrence": "HOURLY",
+                        "repeatInterval": {
+                            "every": 12
+                        },
+                        "startTime": "10:00"
+                    },
+                    "expireAfter": {
+                        "unit": "MONTHS",
+                        "value": 3
+                    },
+                    "lockFor": {
+                        "unit": "MONTHS",
+                        "value": 3
+                    },
+                    "namePattern": {
+                        "format": "On-Premises_Protection_Store_{DateFormat}"
+                    }
+                }
+            ],
+            "protectionStoreInfo": {
+                "id": "a5d4646a-2ab3-4b04-af1b-d1e1cef89dc2",
+                "name": "Local-SO-76-16",
+                "type": "backup-recovery/protection-store",
+                "resourceUri": "/backup-recovery/v1beta1/protection-stores/a5d4646a-2ab3-4b04-af1b-d1e1cef89dc2",
+                "protectionStoreType": "ON_PREMISES"
+            },
+            "type": "BACKUP",
+            "applicationType": "VMWARE"
+        },
+        {
+            "id": "9c2a652e-e501-464e-bb77-3eff8c21cd74",
+            "schedules": [
+                {
+                    "scheduleId": 3,
+                    "sourceProtectionScheduleId": 2,
+                    "name": "HPE_Cloud_Protection_Store_5",
+                    "schedule": {
+                        "recurrence": "DAILY",
+                        "repeatInterval": {
+                            "on": [
+                                2
+                            ],
+                            "every": 1
+                        },
+                        "startTime": "10:00"
+                    },
+                    "expireAfter": {
+                        "unit": "YEARS",
+                        "value": 1
+                    },
+                    "namePattern": {
+                        "format": "HPE_Cloud_Protection_Store_{DateFormat}"
+                    }
+                }
+            ],
+            "protectionStoreInfo": {
+                "id": "95e535ad-3923-4420-b593-fd1f1f67c37b",
+                "name": "CLoudStore1",
+                "type": "backup-recovery/protection-store",
+                "region": "USA, North California",
+                "resourceUri": "/backup-recovery/v1beta1/protection-stores/95e535ad-3923-4420-b593-fd1f1f67c37b",
+                "protectionStoreType": "CLOUD"
+            },
+            "type": "CLOUD_BACKUP",
+            "applicationType": "VMWARE"
+        }
+    ],
+    "createdAt": "2023-10-24 11:12:14.000000Z",
+    "createdBy": {
+        "id": "c6659caa-06b7-4f79-ad2b-839a8814556e",
+        "name": "jaya.santhosh@hpe.com"
+    },
+    "generation": 1,
+    "resourceUri": "/backup-recovery/v1beta1/protection-policies/c84cf908-4c47-439e-ac00-fc2e4e352398",
+    "consoleUri": "/backup-and-recovery/protection-policies/c84cf908-4c47-439e-ac00-fc2e4e352398",
+    "type": "backup-recovery/protection-policy",
+    "updatedAt": "2024-02-21T11:12:14.000000Z"
+}

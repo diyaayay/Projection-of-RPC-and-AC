@@ -2,39 +2,42 @@ from collections import OrderedDict
 import json
 from math import gcd
 from datetime import datetime, timedelta
-import scheduleMap
+import policyTree
 
 # Reading the data from the json for now. Later should be directly read from the server
-with open("request_data.json") as data_file:
+with open("json_files/sample_json_1.json") as data_file:
     req_payload = json.load(data_file)
 
 
 # Construct policy tree for easy access
-root = scheduleMap.build_tree(req_payload["protections"])
+root = policyTree.build_tree(req_payload["protections"])
 # this root is dictionary we hav to convert it to json incase if we are using.
 
 
 # find all the possible paths from the tree which will give the only schedule_ids to find overlaps.
-paths = scheduleMap.find_all_paths(root)
+paths = policyTree.find_all_paths(root)
 # print(paths)
 
 
-# functions that gives all the overlaps possible for given schedules
+# function that gives all the overlaps possible for given schedules
 def find_simultaneous_ring(path, initial_times, intervals, end_time):
-     time_format = "%Y-%m-%d %H:%M"
-     end_time = datetime.strptime(end_time, time_format)
-     times = [datetime.strptime(time_str, time_format) for time_str in initial_times]
-     occurrences = []  # Use a set to ensure uniqueness
+    time_format = "%Y-%m-%d %H:%M"
+    end_time = datetime.strptime(end_time, time_format)
+    times = [datetime.strptime(time_str, time_format) for time_str in initial_times]
+    occurrences = [] 
 
-     while all(time < end_time for time in times):
+    while all(time < end_time for time in times):
         if all(time == times[0] for time in times):
-            tup = [(time.strftime(time_format) + " " + str(path[idx])) for idx, time in enumerate(times)]
+            tup = [
+                (time.strftime(time_format) + " " + str(path[idx]))
+                for idx, time in enumerate(times)
+            ]
             occurrences.append(tuple(tup))
         else:
             for i in range(len(times)):
                 for j in range(i + 1, len(times)):
                     if times[i] == times[j] and j - i == 1:
-                        if all(times[k] == times[i] for k in range(i)):
+                        if all(times[k] >= times[i] for k in range(i)):
                             occurrences.append(
                                 (
                                     times[i].strftime(time_format) + " " + str(path[i]),
@@ -47,9 +50,9 @@ def find_simultaneous_ring(path, initial_times, intervals, end_time):
         for idx in min_indices:
             times[idx] += timedelta(hours=intervals[idx])
 
-     if not occurrences:
+    if not occurrences:
         return "No occurrences found."
-     return list(OrderedDict.fromkeys(occurrences))
+    return list(OrderedDict.fromkeys(occurrences))
 
 
 # for all the valid paths we are going to find the overlaps
@@ -59,18 +62,18 @@ def get_res(endTime):
         initial_times = []
         intervals = []
         for id in path[1:]:
-            node = scheduleMap.find_node(root, id)
+            node = policyTree.find_node(root, id)
             initial_times.append(
-                req_payload["createdAt"].split(" ")[0] + " " + node.startTime
+                req_payload["createdAt"].split("T")[0] + " " + node.startTime
             )
             intervals.append(node.interval)
         res.append(
             {
                 "schedules_involved": path[1:],
                 "occurrences": find_simultaneous_ring(
-                    path[1:], initial_times, intervals, end_time="2024-02-22 00:00"
+                    path[1:], initial_times, intervals, endTime
                 ),
             }
         )
-    print (res)
+    print(res)
     return res
