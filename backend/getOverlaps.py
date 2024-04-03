@@ -2,7 +2,7 @@ from collections import OrderedDict
 import json
 from math import gcd
 from datetime import datetime, timedelta
-import policyTree
+import backend.policyTree as policyTree
 
 # Reading the data from the json for now. Later should be directly read from the server
 with open("json_files/sample_json_1.json") as data_file:

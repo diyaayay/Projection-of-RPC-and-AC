@@ -1,7 +1,7 @@
 import json
 from flask import Flask, jsonify
 from flask import request
-import getOverlaps, policyTree
+import backend.getOverlaps as getOverlaps, backend.policyTree as policyTree
 
 app = Flask(__name__)
 
