@@ -12,3 +12,9 @@ We need to predict how much the cost will be at a future point in time, based on
 **Detection of overlaps in schedules** :
 Warnings to be issued to the user
 
+ 
+
+# To Run The Project: 
+- Run main.py of the root directory
+- Open terminal and cd to client 
+- npm run start
