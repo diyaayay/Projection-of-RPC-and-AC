@@ -1,11 +1,17 @@
+from flask import Flask, request
 import json
 import datetime
 from datetime import datetime
 import math
 
+
+
+app = Flask(__name__)
 #load the json file and read the sampleJson.json.
-with open('./sampleJson.json', 'r') as jsonData:
+with open('json_files/sample_json_1.json', 'r') as jsonData:
     data = json.load(jsonData)
+
+
 
 #function converting all the time units to minutes.  
 def convertTime(expireTime):
@@ -39,7 +45,7 @@ def convertStrToInt(time):
 
 #function to give time difference
 def time_difference(input_date):
-    input_date = datetime.strptime(input_date, '%d:%m:%y %H:%M')
+    input_date = datetime.strptime(input_date, "%d:%m:%y %H:%M")
     current_time = datetime.now()
     time_diff =  input_date - current_time
     time_diff_minutes = int(time_diff.total_seconds() / 60)
@@ -57,9 +63,11 @@ def recToUnit(schedule):
 
 #function to calculate the number of projection count for the various protections and their schedules.
 # def projectionCount(data, givenTime="04:04:24 11:00"):
-def projectionCount(data):
-    givenTime = 2000  # For testing, replace this with the actual given time
-    print("givenTime: ", givenTime)
+
+def projectionCount(data, givenTime):
+    # givenTime = 2000  # For testing, replace this with the actual given time
+    # print("givenTime: ", givenTime)
+    givenTime = time_difference(givenTime)
     scheduleCount = {}
     for protection in data["protections"]:
         protectType = protection['type']
