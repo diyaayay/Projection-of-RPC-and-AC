@@ -16,7 +16,6 @@ root = policyTree.build_tree(req_payload["protections"])
 
 # find all the possible paths from the tree which will give the only schedule_ids to find overlaps.
 paths = policyTree.find_all_paths(root)
-# print(paths)
 
 
 # function that gives all the overlaps possible for given schedules

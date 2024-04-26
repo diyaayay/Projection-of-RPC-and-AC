@@ -1,5 +1,6 @@
 import json
 
+
 # function for converting the time to lowest possible unit - hours
 def convert_to_hours(time, recurrence):
     if recurrence == "HOURLY":
@@ -11,7 +12,8 @@ def convert_to_hours(time, recurrence):
     elif recurrence == "MONTHLY":  # assuming avg 30 days per month
         return time * 24 * 30
 
-# Class TreeNode 
+
+# Class TreeNode
 class TreeNode:
 
     def __init__(self, id, schedule_type, start_time, interval):
@@ -24,8 +26,10 @@ class TreeNode:
     def add_child(self, child):
         self.children.append(child)
 
+
 # creation of tree
-def build_tree(protections):
+def build_tree(data):
+    protections = data["protections"]
     root = TreeNode("root", "root", "root", "root")
     schedule_map = {}
 
@@ -35,9 +39,17 @@ def build_tree(protections):
             schedule_id = schedule["scheduleId"]
 
             try:
-                startTime = protection["createdAt"].split("T")[0] + " " + schedule["schedule"]["startTime"]
+                startTime = (
+                    data["createdAt"].split(" ")[0]
+                    + " "
+                    + schedule["schedule"]["startTime"]
+                )
             except KeyError:
-                startTime = protection["createdAt"].split("T")[0] + " " + schedule["schedule"]["activeTime"]["activeFromTime"]
+                startTime = (
+                    data["createdAt"].split(" ")[0]
+                    + " "
+                    + schedule["schedule"]["activeTime"]["activeFromTime"]
+                )
 
             interval = convert_to_hours(
                 schedule["schedule"]["repeatInterval"]["every"],
@@ -76,6 +88,7 @@ def find_node(root, target_id):
             return node
     return None
 
+
 # utility function
 def tree_to_dict(node):
     result = {
@@ -88,6 +101,7 @@ def tree_to_dict(node):
         result["children"] = [tree_to_dict(child) for child in node.children]
     return result
 
+
 # search for possible paths
 def find_all_paths(root):
     paths = []
@@ -96,9 +110,16 @@ def find_all_paths(root):
     def dfs(node):
         if not node:
             return
-        current_path.append({"id": node.id, "startTime" : node.startTime, "interval": node.interval, "type" : node.type})
+        current_path.append(
+            {
+                "id": node.id,
+                "startTime": node.startTime,
+                "interval": node.interval,
+                "type": node.type,
+            }
+        )
         if not node.children:
-            paths.append(current_path)
+            paths.append(list(current_path))
         else:
             for child in node.children:
                 dfs(child)
