@@ -108,10 +108,11 @@ Copy code
   display: flex;
   justify-content: center;
   align-items: flex-start; /* Align items to the top */
-  height: 100vh;
+  /* height: 100vh; */
   overflow-x: auto; /* Enable horizontal scrolling */
   padding: 20px; /* Add padding to avoid content touching the edges */
-  box-sizing: border-box; /* Include padding in the total width/height */
+  box-sizing: border-box;
+  margin-top: 20px /* Include padding in the total width/height */
 }
 
 .overlaps-form {
@@ -196,4 +197,152 @@ button[type="submit"]:hover {
 .categoryCard {
   width: 40%;
   height: 20rem;
+}
+
+/* 
+const messages = [
+  "Learn React ⚛️",
+  "Apply for jobs 💼",
+  "Invest your new income 🤑",
+];
+ */
+
+ * {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  color: #333;
+}
+
+.steps {
+  width: 600px;
+  background-color: #f7f7f7;
+  border-radius: 7px;
+  padding: 25px 100px;
+  margin: 100px auto;
+}
+
+.numbers {
+  display: flex;
+  justify-content: space-between;
+}
+
+.numbers > div {
+  height: 40px;
+  aspect-ratio: 1;
+  background-color: #e7e7e7;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.numbers .active {
+  background-color: #044015;
+  color: #fff;
+}
+
+.message {
+  text-align: center;
+  font-size: 20px;
+  margin: 40px 0;
+  font-weight: bold;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+
+.buttons button {
+  border: none;
+  cursor: pointer;
+  padding: 10px 15px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0 5px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.buttons button span {
+  font-size: 16px;
+  line-height: 1;
+}
+
+h3 {
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 40px;
+  color: inherit;
+}
+
+.close:hover {
+  color: #044015;
+}
+.checkbox-section {
+  margin-top: 10px;
+  text-align: left;
+}
+
+.checkbox-section label {
+  margin-right: 10px;
+}
+
+.checkbox-section div {
+  margin-bottom: 5px;
+}
+
+.checkbox-section input[type="checkbox"] {
+  margin-right: 5px;
+}
+.schedule-container {
+  margin-top: 20px;
+  text-align: left; /* Align text to the left */
+}
+
+.schedule-container h2 {
+  margin-bottom: 10px;
+  text-align: left; /* Align text to the left */
+}
+
+.schedule-form label {
+  display: block;
+  margin-bottom: 5px;
+  text-align: left; /* Align text to the left */
+}
+
+.schedule-form input[type="submit"] {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  padding: 10px 20px;
+  cursor: pointer;
+  text-align: center; /* Align button text to the center */
+}
+
+.schedule-form input[type="submit"]:hover {
+  background-color: #0056b3;
 }
