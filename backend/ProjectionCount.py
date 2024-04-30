@@ -4,14 +4,11 @@ import datetime
 from datetime import datetime
 import math
 
-
-
 app = Flask(__name__)
+
 #load the json file and read the sampleJson.json.
-with open('json_files/sample_json_1.json', 'r') as jsonData:
-    data = json.load(jsonData)
-
-
+# with open('../json_files/sample_json_1.json', 'r') as jsonData:
+#     data = json.load(jsonData)
 
 #function converting all the time units to minutes.  
 def convertTime(expireTime):
@@ -41,8 +38,6 @@ def convertStrToInt(time):
     total_minutes = hours * 60 + minutes
     return total_minutes
 
-    
-
 #function to give time difference
 def time_difference(input_date):
     input_date = datetime.strptime(input_date, "%d:%m:%y %H:%M")
@@ -63,9 +58,10 @@ def recToUnit(schedule):
 
 #function to calculate the number of projection count for the various protections and their schedules.
 # def projectionCount(data, givenTime="04:04:24 11:00"):
-
+# @app.route("/api/givenTime", methods=['POST'])
 def projectionCount(data, givenTime):
-    # givenTime = 2000  # For testing, replace this with the actual given time
+    # data = request.get_json()
+    # givenTime = int(data['givenTime'])  # For testing, replace this with the actual given time
     # print("givenTime: ", givenTime)
     givenTime = time_difference(givenTime)
     scheduleCount = {}
@@ -75,9 +71,11 @@ def projectionCount(data, givenTime):
         for schedule in protection["schedules"]:
             count = 0
             if 'activeTime' in schedule['schedule']:
+                print("in activeTime")
                 from_time = schedule['schedule']['activeTime']['activeFromTime']
                 until_time = schedule['schedule']['activeTime']['activeUntilTime']
                 delta = convertStrToInt(until_time) - convertStrToInt(from_time)
+                max_count_per_day = math.ceil(delta / recToUnit(schedule["schedule"]))
 
                 # Case 1: givenTime is before the active time range
                 if givenTime < convertStrToInt(from_time):
@@ -88,44 +86,53 @@ def projectionCount(data, givenTime):
                 elif givenTime > delta:
                     # Sub-case: givenTime is within a single day
                     if givenTime < 1440:
-                        print("case 2--i is active")
+                        print("case 2--i is active, given < 24")
                         max = math.ceil(delta / recToUnit(schedule["schedule"]))
                         count = max
                     else:
-                        print("case 2--ii is active")
+                        # Sub-case: givenTime spans multiple days
+                        print("case 2--ii is active, given > 24")
                         days_multiple = math.floor(givenTime / 1440)
                         count_1 = days_multiple * math.ceil(delta / recToUnit(schedule["schedule"]))
-                        remain = givenTime % 1440
-                        if remain < convertStrToInt(from_time):
+                        
+                        remain_time = givenTime % 1440
+                        # remain_time < fromTime
+                        if remain_time < convertStrToInt(from_time):
                             count = count_1
+                        # remain_time > fromTime````
                         else:
-                            count_2 = math.ceil((remain - convertStrToInt(from_time)) / recToUnit(schedule["schedule"]))
+                            count_2 = math.ceil((remain_time - convertStrToInt(from_time)) / recToUnit(schedule["schedule"]))
                             count = count_1 + count_2
 
-                # Case 3: givenTime is within the active time range
+                # Case 3: givenTime is greater than expiry
                 else:
-                    print("given > expiry")
                     if convertTime(schedule['expireAfter']) > 1440:
                         print("case 3--i is active, exp > 24")
                         days_multiple = math.floor(schedule['expireAfter'] / 1440)
-                        count_1 = days_multiple * math.ceil(delta / recToUnit(schedule["schedule"]))
-                        remain = givenTime % 1440
-                        if remain < convertStrToInt(from_time):
+                        count_1 = days_multiple * max_count_per_day
+                        
+                        remain_time = givenTime % 1440
+                        if remain_time < convertStrToInt(from_time):
                             count = count_1
                         else:
-                            count_2 = math.ceil((remain - convertStrToInt(from_time)) / recToUnit(schedule["schedule"]))
+                            count_2 = math.ceil((remain_time - convertStrToInt(from_time)) / recToUnit(schedule["schedule"]))
                             count = count_1 + count_2
                     else:
-                        print("ele")
-            # else:
-            #     if givenTime and convertStrToInt(givenTime) < convertTime(schedule['expireAfter']):
-            #         count = math.ceil((convertStrToInt(givenTime) - convertStrToInt(schedule['schedule']['startTime']))/ recToUnit(schedule["schedule"]))
-            #     else:
-            #         count = math.ceil((convertTime(schedule['expireAfter']) - convertStrToInt(schedule['schedule']['startTime']))/ recToUnit(schedule["schedule"]))
-            #         scheduleCount[protectType][schedule['name']] = count
+                        print("case 3--ii is active, exp < 24")
+                        if (convertTime(schedule['expireAfter'])  > delta ):
+                            count = max
+                        else:
+                            count = math.ceil( convertTime(schedule['expireAfter'])  / recToUnit(schedule["schedule"]))
+            else:
+                # print("in StartTime")
+                if givenTime and (givenTime) < convertTime(schedule['expireAfter']):
+                    count = math.ceil(((givenTime) - convertStrToInt(schedule['schedule']['startTime']))/ recToUnit(schedule["schedule"]))
+                else:
+                    count = math.ceil((convertTime(schedule['expireAfter']) - convertStrToInt(schedule['schedule']['startTime']))/ recToUnit(schedule["schedule"]))
+                    
             scheduleCount[protectType][schedule['name']] = count
-
     print(json.dumps(scheduleCount, indent=4))
-    
-if __name__ ==  "__main__":
-    projectionCount(data=data)
+    return scheduleCount
+
+if __name__ == "_main_":
+    app.run(debug=True)
