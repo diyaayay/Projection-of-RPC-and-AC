@@ -1,0 +1,50 @@
+{
+    "children": [
+        {
+            "children": [
+                {
+                    "id": "7",
+                    "interval": "168",
+                    "startTime": "00:00",
+                    "type": "BACKUP"
+                }
+            ],
+            "id": "1",
+            "interval": "4",
+            "startTime": "00:00",
+            "type": "SNAPSHOT"
+        },
+        {
+            "children": [
+                {
+                    "children": [
+                        {
+                            "id": "5",
+                            "interval": "168",
+                            "startTime": "00:00",
+                            "type": "CLOUD_BACKUP"
+                        },
+                        {
+                            "id": "6",
+                            "interval": "720",
+                            "startTime": "00:00",
+                            "type": "CLOUD_BACKUP"
+                        }
+                    ],
+                    "id": "4",
+                    "interval": "24",
+                    "startTime": "00:00",
+                    "type": "BACKUP"
+                }
+            ],
+            "id": "2",
+            "interval": "24",
+            "startTime": "00:00",
+            "type": "SNAPSHOT"
+        }
+    ],
+    "id": "root",
+    "interval": "root",
+    "startTime": "root",
+    "type": "root"
+}
