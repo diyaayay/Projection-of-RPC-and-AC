@@ -2,24 +2,27 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const Navbar = ({ isAuthenticated, onLogout }) => {
-  isAuthenticated = true
-  const [dropDown, setdropDown] = useState(false);
+  isAuthenticated = true;
+  const [dropDown, setDropDown] = useState(false);
 
   const handleProfileClick = () => {
     // Toggle the dropdown menu
-    setdropDown((prevState) => !prevState);
+    setDropDown((prevState) => !prevState);
   };
 
   const handleLogoutClick = () => {
     // Handle logout action
     onLogout();
-    setdropDown(false);
+    setDropDown(false);
   };
 
   return (
     <div
       className="navbar"
       style={{
+        position: 'fixed', // Make the navbar fixed at the top
+        top: 0, // Align the navbar to the top of the page
+        width: '100%', // Ensure the navbar spans the full width of the viewport
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -27,6 +30,7 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
         padding: '5px 15px', // Decreased padding for the navbar
         backgroundColor: '#f8f9fa',
         borderBottom: '2px solid #ddd',
+        zIndex: 1000, // Ensure the navbar stays above other content
       }}
     >
       {/* Navbar Logo */}

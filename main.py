@@ -21,9 +21,10 @@ def get_overlaps():
 def get_policy_tree():
     return jsonify(policyTree.tree_to_dict(policyTree.build_tree(data["protections"])))
 
-@app.route("/givenTime",methods=["POST"])
+@app.route("/givenTime",methods=['POST'])
 def projection_count():
     givenTime = request.get_json('givenTime')
+    print('givenTime is: ', givenTime)
     scheduleCount = ProjectionCount.projectionCount(data, givenTime=givenTime['givenTime'])
     return jsonify(scheduleCount)
 

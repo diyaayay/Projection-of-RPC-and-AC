@@ -134,5 +134,5 @@ def projectionCount(data, givenTime):
     print(json.dumps(scheduleCount, indent=4))
     return scheduleCount
 
-if __name__ == "_main_":
+if __name__ == "__main__":
     app.run(debug=True)
