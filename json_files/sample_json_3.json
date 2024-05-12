@@ -106,7 +106,7 @@
             "applicationType": "VMWARE"
         }
     ],
-    "createdAt": "2024-04-8 11:12:14.000000Z",
+    "createdAt": "2024-04-8T11:12:14.000000Z",
     "createdBy": {
         "id": "c6659caa-06b7-4f79-ad2b-839a8814556e",
         "name": "jaya.santhosh@hpe.com"
