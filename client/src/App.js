@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import Logo from "./components/Logo";
 import CreatePolicy from "./components/CreatePolicy";
 import OverlapsForm from "./components/OverlapsForm";
+import BackupScheduleVisualization from "./components/ScatterChart";
 
 
 
@@ -53,7 +54,9 @@ function App(){
     <>
       <div>
         <Logo />
+        <BackupScheduleVisualization></BackupScheduleVisualization>
         <Navbar data={data} setShowComp={setShowComp} setShowForm={setShowForm} />
+    
         {showComp && <CreatePolicy showComp={showComp} setShowComp={setShowComp} />}
         {showForm && (
           <OverlapsForm
