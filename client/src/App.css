@@ -1,3 +1,29 @@
 *{
   margin: 0px;
 }
+
+.App {
+  text-align: center;
+}
+
+
+.numbers {
+  display: flex;
+  justify-content: space-between;
+}
+
+.numbers > div {
+  height: 40px;
+  aspect-ratio: 1;
+  background-color: #e7e7e7;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.numbers .active {
+  background-color: #044015;
+  color: #fff;
+}

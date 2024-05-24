@@ -1,14 +1,26 @@
 import json
-from flask import Flask, jsonify
-from flask import request
-import backend.getOverlaps as getOverlaps, backend.policyTree as policyTree
+from flask import Flask, jsonify, request
+import backend.getOverlaps as getOverlaps
+import backend.policyTree as policyTree
 import backend.ProjectionCount as ProjectionCount
+from flask_cors import CORS
+import pymongo
 
 app = Flask(__name__)
+CORS(app)
+
+conn_str = 'mongodb+srv://sanketemalasge2:hpe123@cluster0.0iph2l9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+
+try:
+    client = pymongo.MongoClient(conn_str)
+except Exception as e:
+    print("error: ", e)
+
+db = client['HPE']
+collection = db['Policy Json']
 
 with open("json_files/sample_json_1.json", "r") as data_file:
     data = json.load(data_file)
-
 
 @app.route("/get_overlaps", methods=["GET"])
 def get_overlaps():
@@ -16,18 +28,33 @@ def get_overlaps():
     occurrences = getOverlaps.get_res(end_time)
     return jsonify(occurrences)
 
-
 @app.route("/get_policy_tree", methods=["GET"])
 def get_policy_tree():
     return jsonify(policyTree.tree_to_dict(policyTree.build_tree(data["protections"])))
 
-@app.route("/givenTime",methods=['POST'])
+@app.route("/givenTime", methods=['POST'])
 def projection_count():
-    givenTime = request.get_json('givenTime')
+    givenTime = request.get_json()
     print('givenTime is: ', givenTime)
     scheduleCount = ProjectionCount.projectionCount(data, givenTime=givenTime['givenTime'])
     return jsonify(scheduleCount)
 
+@app.route("/jsondata", methods=["POST"])
+def jsondata():
+    data = request.json
+    print("Received data:", data)
+    return jsonify({"message": "Total object received successfully"}), 200
+
+@app.route("/database", methods=["POST"])
+def database():
+    try:
+        data = request.json
+        # Insert the data into the MongoDB collection
+        result = collection.insert_one(data)
+        # Return a success message with the inserted ID
+        return jsonify({"message": "Data inserted successfully", "id": str(result.inserted_id)}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)

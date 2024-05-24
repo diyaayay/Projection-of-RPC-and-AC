@@ -45,29 +45,38 @@ const Dashboard = () => {
     return (
         <>
             <Navbar />
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '140vh', padding: '20px', backgroundColor: '#f5f7fa' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', padding: '20px', backgroundColor: '#f5f7fa' }}>
                 <DateTimeForm dateTime={dateTime} handleDateTimeChange={handleDateTimeChange} handleSubmit={handleSubmit} />
 
-                <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', marginBottom: '20px' }}>
+                <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-around', marginTop: '20px', width: '100%' }}>
                     <BackupCard
                         title="Array Snapshots"
-                        color="#007bff"
-                        data={resData?.SNAPSHOT}
-                        totalCount={calculateTotalCount(resData?.SNAPSHOT)}
+                        projectionData={resData?.projectionRun.SNAPSHOT}
+                        activeData={resData?.Active.SNAPSHOT}
+                        projectionTotal={calculateTotalCount(resData?.projectionRun.SNAPSHOT)}
+                        activeTotal={calculateTotalCount(resData?.Active.SNAPSHOT)}
+                        projectionColor="#87CEEB"
+                        activeColor="#4682B4"
                     />
 
                     <BackupCard
                         title="On-Premises Backups"
-                        color="#28a745"
-                        data={resData?.BACKUP}
-                        totalCount={calculateTotalCount(resData?.BACKUP)}
+                        projectionData={resData?.projectionRun.BACKUP}
+                        activeData={resData?.Active.BACKUP}
+                        projectionTotal={calculateTotalCount(resData?.projectionRun.BACKUP)}
+                        activeTotal={calculateTotalCount(resData?.Active.BACKUP)}
+                        projectionColor="#98FB98"
+                        activeColor="#3CB371"
                     />
 
                     <BackupCard
                         title="Cloud Backups"
-                        color="#ffc107"
-                        data={resData?.CLOUD_BACKUP}
-                        totalCount={calculateTotalCount(resData?.CLOUD_BACKUP)}
+                        projectionData={resData?.projectionRun.CLOUD_BACKUP}
+                        activeData={resData?.Active.CLOUD_BACKUP}
+                        projectionTotal={calculateTotalCount(resData?.projectionRun.CLOUD_BACKUP)}
+                        activeTotal={calculateTotalCount(resData?.Active.CLOUD_BACKUP)}
+                        projectionColor="#FFD700"
+                        activeColor="#FF8C00"
                     />
                 </div>
             </div>
