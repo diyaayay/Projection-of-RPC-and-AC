@@ -35,7 +35,7 @@
                         "repeatInterval": {
                             "every": 1
                         },
-                        "startTime": "00:00"
+                        "startTime": "00:00"                    
                     },
                     "expireAfter": {
                         "unit": "DAYS",
