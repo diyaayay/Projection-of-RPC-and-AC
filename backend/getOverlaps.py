@@ -2,77 +2,65 @@ from collections import OrderedDict
 import json
 from math import gcd
 from datetime import datetime, timedelta
-import backend.policyTree as policyTree
-
-# Reading the data from the json for now. Later should be directly read from the server
-with open("json_files/sample_json_1.json") as data_file:
-    req_payload = json.load(data_file)
+import backend.PolicyTree as PolicyTree
 
 
-# Construct policy tree for easy access
-root = policyTree.build_tree(req_payload["protections"])
-# this root is dictionary we hav to convert it to json incase if we are using.
-
-
-# find all the possible paths from the tree which will give the only schedule_ids to find overlaps.
-paths = policyTree.find_all_paths(root)
-# print(paths)
-
-
-# function that gives all the overlaps possible for given schedules
-def find_simultaneous_ring(path, initial_times, intervals, end_time):
-    time_format = "%Y-%m-%d %H:%M"
-    end_time = datetime.strptime(end_time, time_format)
-    times = [datetime.strptime(time_str, time_format) for time_str in initial_times]
+def find_recent_source(path, endTime):
+    # list to stores all the possible occurences for given path
     occurrences = []
-
-    while all(time < end_time for time in times):
-        if all(time == times[0] for time in times):
-            tup = [
-                (time.strftime(time_format) + " " + str(path[idx]))
-                for idx, time in enumerate(times)
-            ]
-            occurrences.append(tuple(tup))
-        else:
-            for i in range(len(times)):
-                for j in range(i + 1, len(times)):
-                    if times[i] == times[j] and j - i == 1:
-                        if all(times[k] >= times[i] for k in range(i)):
-                            occurrences.append(
-                                (
-                                    times[i].strftime(time_format) + " " + str(path[i]),
-                                    times[j].strftime(time_format) + " " + str(path[j]),
-                                )
-                            )
-
+    time_format = "%Y-%m-%d %H:%M"
+    times = []
+    for p in path:
+        # initial time for all the schedules. can be modified with desired initial starttime
+        times.append(datetime.strptime(p.get("startTime"), time_format))
+    endTime = datetime.strptime(endTime, time_format)
+    while all(time < endTime for time in times):
         min_time = min(times)
-        min_indices = [i for i, time in enumerate(times) if time == min_time]
-        for idx in min_indices:
-            times[idx] += timedelta(hours=intervals[idx])
+        min_indices = [index for index, value in enumerate(times) if value == min_time]
 
-    if not occurrences:
-        return "No occurrences found."
-    return list(OrderedDict.fromkeys(occurrences))
+        for idx in min_indices:
+            if path[idx].get("type") != "SNAPSHOT":  # not snapshot
+                # print the link present, either cloud backup or on-prem
+                source_time = times[idx - 1] - timedelta(
+                    hours=path[idx - 1].get("interval")
+                )
+                print(
+                    f"source : {source_time.strftime(time_format)} [{path[idx-1]['id']}] -> current : {times[idx].strftime(time_format)} [{path[idx]['id']}]"
+                )
+                occurrences.append(
+                    {
+                        "id": path[idx]["id"],
+                        "time": times[idx].strftime(time_format),
+                        "source_id": path[idx - 1]["id"],
+                        "source_time": source_time.strftime(time_format),
+                    }
+                )
+                times[idx] += timedelta(hours=path[idx].get("interval"))
+            else:
+                print(
+                    f"current : {times[idx].strftime(time_format)} [{path[idx]['id']}]"
+                )
+                occurrences.append(
+                    {
+                        "id": path[idx]["id"],
+                        "time": times[idx].strftime(time_format),
+                        "source_id": "None",
+                        "source_time": "None",
+                    }
+                )
+                times[idx] += timedelta(hours=path[idx].get("interval"))
+
+    return occurrences
 
 
 # for all the valid paths we are going to find the overlaps
-def get_res(endTime):
+def get_res(paths, endTime):
     res = []
     for path in paths:
-        initial_times = []
-        intervals = []
-        for id in path[1:]:
-            node = policyTree.find_node(root, id)
-            initial_times.append(
-                req_payload["createdAt"].split("T")[0] + " " + node.startTime
-            )
-            intervals.append(node.interval)
         res.append(
             {
                 "schedules_involved": path[1:],
-                "occurrences": find_simultaneous_ring(
-                    path[1:], initial_times, intervals, endTime
-                ),
+                "occurrences": find_recent_source(path[1:], endTime),
             }
         )
     return res
