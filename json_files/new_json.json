@@ -1,0 +1,68 @@
+{
+  "_id": {
+    "$oid": "66585b6f9d8bc770057816cb"
+  },
+  "policyName": "random2",
+  "createdAt": "2024-05-30T16:09:48",
+  "arraySchedules": [
+    {
+      "scheduleId": {
+        "$numberInt": "1"
+      },
+      "scheduleName": "Array_Snapshot_1",
+      "backupFrequency": {
+        "value": "1",
+        "unit": "hours"
+      },
+      "timeRangeStart": "23:04",
+      "timeRangeEnd": "23:05",
+      "retainFor": {
+        "value": "2",
+        "unit": "hours"
+      }
+    }
+  ],
+  "onPremisesSchedules": [
+    {
+      "scheduleId": {
+        "$numberInt": "2"
+      },
+      "scheduleName": "On-Premises_Protection_Store_2",
+      "sourceScheduleId": {
+        "$numberInt": "1"
+      },
+      "backupFrequency": {
+        "value": "5",
+        "unit": "days"
+      },
+      "StartAfter": "23:04",
+      "retainFor": {
+        "value": "3",
+        "unit": "days"
+      }
+    }
+  ],
+  "cloudStoreSchedules": [
+    {
+      "scheduleId": {
+        "$numberInt": "3"
+      },
+      "scheduleName": "HPE_Cloud_Protection_Store_3",
+      "sourceScheduleId": {
+        "$numberInt": "3"
+      },
+      "backupFrequency": {
+        "value": "5",
+        "unit": "weeks"
+      },
+      "StartAfter": "03:45",
+      "retainFor": {
+        "value": "4",
+        "unit": "weeks"
+      }
+    }
+  ],
+  "applicationType": [
+    "HPE Array Volumes"
+  ]
+}

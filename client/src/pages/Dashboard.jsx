@@ -8,6 +8,7 @@ const Dashboard = () => {
     const [dateTime, setDateTime] = useState('');
     const [customDate, setCustomDate] = useState('');
     const [resData, setResData] = useState(null);
+    const [policyName, setPolicyName] = useState('');
 
     const convertToCustomFormat = (isoString) => {
         const dateObj = new Date(isoString);
@@ -25,11 +26,18 @@ const Dashboard = () => {
         setCustomDate(customFormattedDateTime);
     };
 
+    const handlePolicyNameChange = (name) => {
+        setPolicyName(name);
+        // console.log(policyName)
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            console.log(policyName)
             const res = await axios.post('/givenTime', {
                 givenTime: customDate,
+                policyName: policyName
             });
             setResData(res.data);
             console.log(res.data);
@@ -46,7 +54,8 @@ const Dashboard = () => {
         <>
             <Navbar />
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', padding: '20px', backgroundColor: '#f5f7fa' }}>
-                <DateTimeForm dateTime={dateTime} handleDateTimeChange={handleDateTimeChange} handleSubmit={handleSubmit} />
+                <DateTimeForm dateTime={dateTime} handleDateTimeChange={handleDateTimeChange} handleSubmit={handleSubmit}  policyName={policyName}
+                    handlePolicyNameChange={handlePolicyNameChange} />
 
                 <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-around', marginTop: '20px', width: '100%' }}>
                     <BackupCard
