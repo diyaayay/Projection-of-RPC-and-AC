@@ -116,7 +116,7 @@ def tree_to_list_format(node):
             lis.append(
                 {
                     "Id": int(child.id),
-                    "Role": str(child.id),
+                    "Role": str(child.type) +" "+ str(child.id),
                     "Team": "parent" if (str(node.id) == "root") else str(node.id),
                 }
             )
