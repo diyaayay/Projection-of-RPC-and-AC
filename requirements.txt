@@ -1,0 +1,4 @@
+pymongo
+xgboost
+flask_cors
+pickle

@@ -3,6 +3,7 @@ import json
 import datetime
 from datetime import datetime
 import math
+from backend.RecentValidTimestamp import getValidTimestamps 
 
 app = Flask(__name__)
 
@@ -91,7 +92,7 @@ def recToUnitSeconds(schedule):
 # @app.route("/api/givenTime", methods=['POST'])
 def projectionCount(data, givenTime):
     givenTimeMin = time_difference(givenTime)
-    print(givenTimeMin)
+    # print(givenTimeMin)
     scheduleCount = {'projectionRun': {}, 'Active':{}}
     for protection in data["protections"]:
         protectType = protection['type']
@@ -167,8 +168,8 @@ def projectionCount(data, givenTime):
                     n = 1
                     while True:
                         totalExpireMinutes = expireTimeMinutes * n
-                        print(schedule['name'], totalExpireMinutes)
-                        print('givenTime', givenTimeMin)
+                        # print(schedule['name'], totalExpireMinutes)
+                        # print('givenTime', givenTimeMin)
                         if totalExpireMinutes > givenTimeMin:
                             if n>1:
                                 n -= 1
@@ -178,13 +179,16 @@ def projectionCount(data, givenTime):
                                 totalExpireMinutes = 0
                                 break
                         n += 1
-                    print('frequency minutes', recToUnitMinutes(schedule['schedule']))
+                    # print('frequency minutes', recToUnitMinutes(schedule['schedule']))
                     count = math.ceil((givenTimeMin - totalExpireMinutes)/recToUnitMinutes(schedule['schedule']))
                     scheduleCount['Active'][protectType][schedule['name']] = count
                 else:
                     scheduleCount['Active'][protectType][schedule['name']] = 0          
     print(json.dumps(scheduleCount, indent=4))
+    res = getValidTimestamps(data=data, given_time=givenTime, scheduleCount=scheduleCount)
+    scheduleCount['CostAndSize'] = res
+    # print(json.dumps(scheduleCount, indent=4))
     return scheduleCount
 
-if __name__ == "__main__":
+if __name__ == "_main__":
     app.run(debug=True)

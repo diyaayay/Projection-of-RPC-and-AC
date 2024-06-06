@@ -68,11 +68,13 @@ def get_policy_tree():
 
 @app.route("/givenTime", methods=["POST"])
 def projection_count():
+    print(request.get_json())
     givenTime = request.get_json()
-    print("givenTime is: ", givenTime)
-    scheduleCount = ProjectionCount.projectionCount(
-        data, givenTime=givenTime["givenTime"]
-    )
+   
+    print('givenTime is: ', givenTime)
+    # jsonData = collection.find_one({"policyName":givenTime['policyName']})
+    # print(jsonData)
+    scheduleCount = ProjectionCount.projectionCount(data, givenTime=givenTime['givenTime'])
     return jsonify(scheduleCount)
 
 
@@ -87,15 +89,24 @@ def jsondata():
 def database():
     try:
         data = request.json
-        # Insert the data into the MongoDB collection
-        result = collection.insert_one(data)
-        # Return a success message with the inserted ID
-        return (
-            jsonify(
-                {"message": "Data inserted successfully", "id": str(result.inserted_id)}
-            ),
-            200,
-        )
+
+        policy_name = data.get("policyName")
+
+        if policy_name:
+            # Check if a policy with the same name already exists
+            existing_policy = collection.find_one({"policyName": policy_name})
+            if existing_policy:
+                print("name already exists")
+                return jsonify({"error": "Policy name already exists"}), 400
+
+            # Insert the data into the MongoDB collection
+            result = collection.insert_one(data)
+            # Return a success message with the inserted ID
+            return jsonify({"message": "Data inserted successfully", "id": str(result.inserted_id)}), 200
+        else:
+            return jsonify({"error": "Policy name is required"}), 400
+
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
