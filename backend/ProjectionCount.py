@@ -185,7 +185,9 @@ def projectionCount(data, givenTime):
                 else:
                     scheduleCount['Active'][protectType][schedule['name']] = 0          
     print(json.dumps(scheduleCount, indent=4))
-    getValidTimestamps(data=data, given_time=givenTime, scheduleCount=scheduleCount)
+    res = getValidTimestamps(data=data, given_time=givenTime, scheduleCount=scheduleCount)
+    scheduleCount['CostAndSize'] = res
+    # print(json.dumps(scheduleCount, indent=4))
     return scheduleCount
 
 if __name__ == "_main__":

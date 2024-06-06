@@ -1,7 +1,7 @@
 import pickle
 from datetime import datetime, timedelta
 import pandas as pd
-
+import json
 
 # Function to create a feature set for a given future datetime
 def create_feature_set(future_datetime):
@@ -15,10 +15,8 @@ def create_feature_set(future_datetime):
 
     return pd.DataFrame(features, index=[0])
 
-
-filename = "xgb_model_delta.sav"
+filename = "C:/Users/USER/OneDrive/Desktop/projectionCount/Projection-of-RPC-and-AC/models/xgb_model_delta.sav"
 loaded_model = pickle.load(open(filename, "rb"))
-
 
 req = [
     {
@@ -114,29 +112,28 @@ information = {
     "CLOUD_BACKUP": {"full_backup": 80, "cost": 60, "c_ratio": 0.1},
 }
 
-
 def projectCost(schedules, information):
-    res = []
+    print(schedules, information)
+    res = {}
     for item in schedules:
         type = item.get("type")
         name = item.get("name")
         cumilative_delta = information[type].get("full_backup")
         for timestamp in item["timestamps"]:
             feature_set = create_feature_set(pd.Timestamp(timestamp))
-            cumilative_delta += loaded_model.predict(feature_set)[0]
+            delta_prediction = loaded_model.predict(feature_set)[0]
+            print(f"Prediction for {timestamp} ({name}): {delta_prediction}")
+            cumilative_delta += delta_prediction
 
         cumilative_delta = cumilative_delta * information[type].get("c_ratio")
-        res.append(
-            {
-                "name": name,
-                "type": type,
-                "size_on_disk": cumilative_delta,
-                "cost_projected": cumilative_delta * information[type].get("cost"),
-            }
-        )
-
+        res[name] = {
+            "type": type,
+            "size_on_disk": cumilative_delta,
+            "cost_projected": cumilative_delta * information[type].get("cost"),
+        }
+        print(f"Result for {name}: {res[name]}")
+    print(res)  
     return res
-
 
 if __name__ == "__main__":
     print(projectCost(req, information))

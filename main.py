@@ -9,7 +9,7 @@ import pymongo
 app = Flask(__name__)
 CORS(app)
 
-conn_str = 'mongodb+srv://sanketemalasge2:hp123@cluster0.0iph2l9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+conn_str = 'mongodb+srv://sanketemalasge2:hpe123@cluster0.0iph2l9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
 
 try:
     client = pymongo.MongoClient(conn_str)
