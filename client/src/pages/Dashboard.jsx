@@ -4,6 +4,7 @@ import axios from 'axios';
 import DateTimeForm from '../components/DateTime';
 import BackupCard from '../components/BackUpCard';
 import CostAndSizeCard from '../components/CostSizeCard';
+import PolicyTree from "../components/PolicyTree";
 
 const Dashboard = () => {
     const [dateTime, setDateTime] = useState('');
@@ -110,6 +111,7 @@ const Dashboard = () => {
                     />
                 </div>
             </div>
+            <div><PolicyTree /></div>
         </>
     );
 };

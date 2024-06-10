@@ -39,7 +39,7 @@ import { DataManager, Query } from "@syncfusion/ej2-data";
 //     }
 // ];
 
-export default function App() {
+export default function PolicyTree() {
     const [data, setData] = React.useState([]);
 
 React.useEffect(() => {
