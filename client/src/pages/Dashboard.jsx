@@ -5,6 +5,7 @@ import DateTimeForm from '../components/DateTime';
 import BackupCard from '../components/BackUpCard';
 import CostAndSizeCard from '../components/CostSizeCard';
 import PolicyTree from "../components/PolicyTree";
+import ScatterChart from "../components/ScatterChart";
 
 const Dashboard = () => {
     const [dateTime, setDateTime] = useState('');
@@ -111,7 +112,9 @@ const Dashboard = () => {
                     />
                 </div>
             </div>
+            <div><ScatterChart/></div>
             <div><PolicyTree /></div>
+           
         </>
     );
 };
