@@ -4,10 +4,12 @@ from datetime import datetime
 from flask_cors import CORS
 import pymongo
 from backend.projectionCountUpdated import projectionCount
+from backend.policyTree import tree_to_list_format, build_tree
 
 app = Flask(__name__)
 CORS(app)
 
+#forked
 # conn_str = "mongodb+srv://sanketemalasge2:hpe123@cluster0.0iph2l9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
 conn_str =  'mongodb+srv://saiis21:hpe2444@cluster0.vaxb7qe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
@@ -63,7 +65,7 @@ def handle_exception(err):
 
 # @app.route("/get_policy_tree", methods=["GET"])
 # def get_policy_tree():
-#     return jsonify(PolicyTree.tree_to_list_format(PolicyTree.build_tree(data)))
+#     return jsonify(tree_to_list_format(build_tree(data)))
 
 
 # @app.route("/givenTime", methods=["POST"])
