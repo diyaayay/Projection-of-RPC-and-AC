@@ -108,15 +108,17 @@ def tree_to_dict(node):
     return result
 
 
-lis = [
-    {
-        "Id": "parent",
-        "Role": "root",
-    }
-]
-
-
 def tree_to_list_format(node):
+    lis = [
+        {
+            "Id": "parent",
+            "Role": "root",
+        }
+    ]
+    return policyTree(node, lis)
+
+
+def policyTree(node, lis):
     if node.children:
         for child in node.children:
             lis.append(
@@ -126,7 +128,7 @@ def tree_to_list_format(node):
                     "Team": "parent" if (str(node.id) == "root") else str(node.id),
                 }
             )
-            tree_to_list_format(child)
+            policyTree(child, lis)
     return lis
 
 
