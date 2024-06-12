@@ -122,8 +122,8 @@ const Dashboard = () => {
                     />
                 </div>
             </div>
-            <div><PolicyTree policy={policyName} /></div>
             <div><ScatterChart data={projectionRun} /></div>
+            {policyName ? <div><PolicyTree policy={policyName} /></div> : <h2>Policy Tree</h2>}
 
         </>
     );

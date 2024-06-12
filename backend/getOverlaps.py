@@ -48,7 +48,7 @@ def find_recent_source(path, endTime):
                         "source_time": "None",
                     }
                 )
-                times[idx] += timedelta(hours=path[idx].get("interval"))
+                times[idx] += timedelta(minutes=path[idx].get("interval"))
 
     return occurrences
 
