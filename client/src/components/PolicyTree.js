@@ -63,66 +63,71 @@ export default function PolicyTree(policy) {
   console.log(data);
   let items = new DataManager(data, new Query().take(5));
   return (
-    <DiagramComponent
-      id="container"
-      width={"100%"}
-      height={"550px"}
-      //Uses layout to auto-arrange nodes on the diagram page
-      layout={{
-        //set the type as Organizational Chart
-        type: "OrganizationalChart",
-        enableAnimation: true,
-        margin: { top: 20 },
-        horizontalSpacing: 25,
-        verticalSpacing: 30,
-        horizontalAlignment: "Left",
-        verticalAlignment: "Top",
-      }}
-      //Configures data source for diagram
-      dataSourceSettings={{
-        id: "Id",
-        parentId: "Team",
-        dataManager: items,
-      }}
-      //Sets the default properties for nodes and connectors
-      getNodeDefaults={(obj) => {
-        obj.shape = {
-          type: "Text",
-          content: obj.data.Role,
-        };
-        obj.style = {
-          fill: "None",
-          strokeColor: "none",
-          strokeWidth: 2,
-          bold: true,
-          color: "white",
-        };
-        obj.borderColor = "white";
-        obj.backgroundColor = "#6BA5D7";
-        obj.borderWidth = 1;
-        obj.width = 75;
-        obj.height = 40;
-        obj.shape.margin = {
-          left: 5,
-          right: 5,
-          top: 5,
-          bottom: 5,
-        };
-        return obj;
-      }}
-      getConnectorDefaults={(connector, diagram) => {
-        connector.style = {
-          strokeColor: "#6BA5D7",
-          strokeWidth: 2,
-        };
-        connector.targetDecorator.style.fill = "#6BA5D7";
-        connector.targetDecorator.style.strokeColor = "#6BA5D7";
-        connector.type = "Orthogonal";
-        return connector;
-      }}
-    >
-      <Inject services={[DataBinding, HierarchicalTree]} />
-    </DiagramComponent>
+    <div>
+      <h2 className="" style={{ marginLeft: "24px" }}>
+        Policy Tree
+      </h2>
+      <DiagramComponent
+        id="container"
+        width={"100%"}
+        height={"550px"}
+        //Uses layout to auto-arrange nodes on the diagram page
+        layout={{
+          //set the type as Organizational Chart
+          type: "OrganizationalChart",
+          enableAnimation: true,
+          margin: { top: 20 },
+          horizontalSpacing: 25,
+          verticalSpacing: 30,
+          horizontalAlignment: "Left",
+          verticalAlignment: "Top",
+        }}
+        //Configures data source for diagram
+        dataSourceSettings={{
+          id: "Id",
+          parentId: "Team",
+          dataManager: items,
+        }}
+        //Sets the default properties for nodes and connectors
+        getNodeDefaults={(obj) => {
+          obj.shape = {
+            type: "Text",
+            content: obj.data.Role,
+          };
+          obj.style = {
+            fill: "None",
+            strokeColor: "none",
+            strokeWidth: 2,
+            bold: true,
+            color: "white",
+          };
+          obj.borderColor = "white";
+          obj.backgroundColor = "#6BA5D7";
+          obj.borderWidth = 1;
+          obj.width = 75;
+          obj.height = 40;
+          obj.shape.margin = {
+            left: 5,
+            right: 5,
+            top: 5,
+            bottom: 5,
+          };
+          return obj;
+        }}
+        getConnectorDefaults={(connector, diagram) => {
+          connector.style = {
+            strokeColor: "#6BA5D7",
+            strokeWidth: 2,
+          };
+          connector.targetDecorator.style.fill = "#6BA5D7";
+          connector.targetDecorator.style.strokeColor = "#6BA5D7";
+          connector.type = "Orthogonal";
+          return connector;
+        }}
+      >
+        <Inject services={[DataBinding, HierarchicalTree]} />
+      </DiagramComponent>
+    </div>
   );
 }
 // const root = ReactDOM.createRoot(document.getElementById("diagram"));

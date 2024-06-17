@@ -17,7 +17,15 @@ const getCategoryColor = (categoryName) => {
 
 // Grid component
 function Grid({ categories, timeIntervals, occurrences, onCellHover }) {
+    const [currentSchedule, setCurrentSchedule] = useState(null);
 
+    const handleMouseEnter = (currentId, currentTime, sourceId, sourceTime) => {
+        setCurrentSchedule({ currentId, currentTime, sourceId, sourceTime });
+    };
+
+    const handleMouseLeave = () => {
+        setCurrentSchedule(null);
+    };
     return (
         <div className="grid-container">
             <div className="grid">
@@ -54,9 +62,11 @@ function Grid({ categories, timeIntervals, occurrences, onCellHover }) {
                                             <div
                                                 key={index}
                                                 className="circle"
+                                                onMouseEnter={() => handleMouseEnter(occurrence.id, occurrence.time, occurrence.source_id, occurrence.source_time)}
+                                                onMouseLeave={handleMouseLeave}
                                             >
                                                 <svg width="20" height="20">
-                                                    <circle cx="10" cy="10" r="5" fill={getCategoryColor(category.name)} />
+                                                    <circle cx="10" cy="10" r="5" fill={occurrence.id === currentSchedule?.sourceId && occurrence.time === currentSchedule?.sourceTime ? 'black' :  getCategoryColor(category.name)} />
                                                 </svg>
                                             </div>
                                         ))}

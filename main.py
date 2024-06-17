@@ -73,13 +73,13 @@ def get_overlaps():
 @app.route("/get_policy_tree", methods=["POST"])
 def get_policy_tree():
     req = request.get_json()
-    print(req)
+    # print(req)
     try:
         jsonData = collection.find_one({"policyName": req["data"]["policy"]})
         # print(jsonData)
     except MongoError as e:
         print(e)
-    print(json.dumps(jsonData, indent=4, default=str))
+    # print(json.dumps(jsonData, indent=4, default=str))
     return jsonify(tree_to_list_format(build_tree(jsonData)))
 
 
