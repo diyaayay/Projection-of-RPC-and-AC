@@ -5,9 +5,9 @@ import './styles.css'; // Import CSS file for styles
 const getCategoryColor = (categoryName) => {
     switch (categoryName) {
         case "SNAPSHOT":
-            return "#0000FF"; // Blue
+            return "#87CEEB"; // Blue
         case "BACKUP":
-            return "#01A982"; // Green
+            return "#90EE90"; // Green
         case "CLOUD_BACKUP":
             return "#FFFF00"; // Yellow
         default:
@@ -18,14 +18,18 @@ const getCategoryColor = (categoryName) => {
 // Grid component
 function Grid({ categories, timeIntervals, occurrences, onCellHover }) {
     const [currentSchedule, setCurrentSchedule] = useState(null);
+    const [hovered, setHovered] = useState(null);
 
     const handleMouseEnter = (currentId, currentTime, sourceId, sourceTime) => {
         setCurrentSchedule({ currentId, currentTime, sourceId, sourceTime });
+        setHovered({ sourceId, sourceTime });
     };
 
     const handleMouseLeave = () => {
         setCurrentSchedule(null);
+        setHovered(null);
     };
+
     return (
         <div className="grid-container">
             <div className="grid">
@@ -65,8 +69,8 @@ function Grid({ categories, timeIntervals, occurrences, onCellHover }) {
                                                 onMouseEnter={() => handleMouseEnter(occurrence.id, occurrence.time, occurrence.source_id, occurrence.source_time)}
                                                 onMouseLeave={handleMouseLeave}
                                             >
-                                                <svg width="20" height="20">
-                                                    <circle cx="10" cy="10" r="5" fill={occurrence.id === currentSchedule?.sourceId && occurrence.time === currentSchedule?.sourceTime ? 'black' :  getCategoryColor(category.name)} />
+                                                <svg width={hovered?.sourceId === occurrence.id && hovered?.sourceTime === occurrence.time ? "40" : "30"} height={hovered?.sourceId === occurrence.id && hovered?.sourceTime === occurrence.time ? "40" : "30"}>
+                                                    <circle cx="20" cy="20" r={hovered?.sourceId === occurrence.id && hovered?.sourceTime === occurrence.time ? "15" : "10"} fill={getCategoryColor(category.name)} />
                                                 </svg>
                                             </div>
                                         ))}
@@ -106,8 +110,6 @@ function BackupScheduleVisualization(data) {
         return acc;
     }, []);
 
-
-
     const handleCellHover = (currentId, currentTime, occurrencesInCell) => {
         const occurrenceDetails = occurrencesInCell.map(occurrence => ({
             scheduleId: occurrence.id,
@@ -129,9 +131,11 @@ function BackupScheduleVisualization(data) {
             setFilteredOccurrences(filtered);
         }
     };
+
     const timeIntervals = [...new Set(filteredOccurrences.map(occurrence => occurrence.time))].map(time => ({
         startTime: time
     }));
+
     return (
         <div className="visualization">
             <h2>Backup Schedule Visualization</h2>
@@ -163,10 +167,10 @@ function BackupScheduleVisualization(data) {
                             <h3 className="heading">SCHEDULE DETAILS</h3>
                             {currentSchedule.occurrenceDetails.map((detail, index) => (
                                 <div key={index} className="detail">
-                                    <div>Schedule ID: {detail.scheduleId}</div>
-                                    <div>Schedule Time: {detail.scheduleTime}</div>
-                                    <div>Source Schedule ID: {detail.sourceScheduleId}</div>
-                                    <div>Source Schedule Time: {detail.sourceScheduleTime}</div>
+                                    <div className="detail-item"><span className="label">Schedule ID:</span> {detail.scheduleId}</div>
+                                    <div className="detail-item"><span className="label">Schedule Time:</span> {detail.scheduleTime}</div>
+                                    <div className="detail-item"><span className="label">Source Schedule ID:</span> {detail.sourceScheduleId}</div>
+                                    <div className="detail-item"><span className="label">Source Schedule Time:</span> {detail.sourceScheduleTime}</div>
                                 </div>
                             ))}
                         </div>
@@ -178,4 +182,3 @@ function BackupScheduleVisualization(data) {
 }
 
 export default BackupScheduleVisualization;
-
