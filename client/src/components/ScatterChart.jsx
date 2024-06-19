@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import './styles.css'; // Import CSS file for styles
+import './styles.css'; 
 
-// Function to get color based on category name
 const getCategoryColor = (categoryName) => {
     switch (categoryName) {
         case "SNAPSHOT":
@@ -11,7 +10,7 @@ const getCategoryColor = (categoryName) => {
         case "CLOUD_BACKUP":
             return "#FFFF00"; // Yellow
         default:
-            return "#000000"; // Default to black
+            return "#000000"; 
     }
 };
 
@@ -45,7 +44,7 @@ function Grid({ categories, timeIntervals, occurrences, onCellHover }) {
 
                 {categories.map(category => {
                     if (category.name !== "SNAPSHOT" && category.name !== "BACKUP" && category.name !== "CLOUD_BACKUP") {
-                        return null; // Skip categories other than SNAPSHOT, BACKUP, and CLOUD_BACKUP
+                        return null; 
                     }
                     return (
                         <div key={category.id} className="grid-row">
@@ -69,9 +68,20 @@ function Grid({ categories, timeIntervals, occurrences, onCellHover }) {
                                                 onMouseEnter={() => handleMouseEnter(occurrence.id, occurrence.time, occurrence.source_id, occurrence.source_time)}
                                                 onMouseLeave={handleMouseLeave}
                                             >
-                                                <svg width={hovered?.sourceId === occurrence.id && hovered?.sourceTime === occurrence.time ? "40" : "30"} height={hovered?.sourceId === occurrence.id && hovered?.sourceTime === occurrence.time ? "40" : "30"}>
-                                                    <circle cx="20" cy="20" r={hovered?.sourceId === occurrence.id && hovered?.sourceTime === occurrence.time ? "15" : "10"} fill={getCategoryColor(category.name)} />
-                                                </svg>
+                                                <svg
+  width={hovered?.sourceId === occurrence.id && hovered?.sourceTime === occurrence.time ? "40" : "30"}
+  height={hovered?.sourceId === occurrence.id && hovered?.sourceTime === occurrence.time ? "40" : "30"}
+>
+  <circle
+    cx="20"
+    cy="20"
+    r={hovered?.sourceId === occurrence.id && hovered?.sourceTime === occurrence.time ? "15" : "10"}
+    fill={getCategoryColor(category.name)}
+    stroke={hovered?.sourceId === occurrence.id && hovered?.sourceTime === occurrence.time ? "#555" : "none"} /* Outline color */
+    strokeWidth="2" /* Outline width */
+  />
+</svg>
+
                                             </div>
                                         ))}
                                     </div>
@@ -90,10 +100,7 @@ function BackupScheduleVisualization(data) {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [filteredOccurrences, setFilteredOccurrences] = useState([]);
-    // console.log(data)
     const response = data
-    // console.log(response)
-    // console.log(typeof (response))
 
     const occurrences = response.data.map(entry => entry.occurrences).flat();
 
@@ -161,7 +168,7 @@ function BackupScheduleVisualization(data) {
             {startDate && endDate && (
                 <>
                     <Grid categories={categories} timeIntervals={timeIntervals} occurrences={filteredOccurrences} onCellHover={handleCellHover} />
-                    {/* Displaying the schedule details below the table */}
+                    
                     {currentSchedule && (
                         <div className="details">
                             <h3 className="heading">SCHEDULE DETAILS</h3>
