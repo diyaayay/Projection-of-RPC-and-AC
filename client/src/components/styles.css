@@ -12,8 +12,8 @@
 
 .grid-cell {
   border: 1px solid #ccc;
-  width: 150px; /* Adjust width as needed */
-  height: 50px; /* Adjust height as needed */
+  width: 150px; 
+  height: 50px; 
   display: flex;
   font-size: small;
   align-items: center;
@@ -30,7 +30,6 @@
   text-decoration: underline;
 }
 
-/* CSS for tooltip */
 .tooltip {
   margin-top: 2rem;
   position: relative;
@@ -44,7 +43,7 @@
 }
 
 .grid-cell:hover .tooltip {
-  display: inline; /* Show the tooltip when hovering over a grid cell */
+  display: inline; 
 }
 
 .hover-info {
@@ -58,8 +57,7 @@
 }
 
 .grid-cell {
-  position: relative; /* Ensure that tooltip is positioned relative to the cell */
-  /* Add any additional styling for the grid cells */
+  position: relative; 
 }
 
 .date-time-input {
@@ -189,4 +187,22 @@
 .label {
   font-weight: bold;
   color: #555;
+}
+
+.grid-cell:hover .circle {
+  transform: scale(1.1); 
+}
+
+.circle {
+  display: inline-block;
+  margin: 2px;
+  transition: transform 0.2s ease;
+}
+
+.circle svg {
+  transition: transform 0.2s ease;
+}
+
+.circle:hover svg circle {
+  stroke: #555; 
 }
