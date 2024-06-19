@@ -24,9 +24,9 @@ def find_recent_source(path, endTime):
                 source_time = times[idx - 1] - timedelta(
                     minutes=path[idx - 1].get("interval")
                 )
-                print(
-                    f"source : {source_time.strftime(time_format)} [{path[idx-1]['id']}] -> current : {times[idx].strftime(time_format)} [{path[idx]['id']}]"
-                )
+                # print(
+                #     f"source : {source_time.strftime(time_format)} [{path[idx-1]['id']}] -> current : {times[idx].strftime(time_format)} [{path[idx]['id']}]"
+                # )
                 occurrences.append(
                     {
                         "id": path[idx]["id"],
@@ -37,9 +37,9 @@ def find_recent_source(path, endTime):
                 )
                 times[idx] += timedelta(minutes=path[idx].get("interval"))
             else:
-                print(
-                    f"current : {times[idx].strftime(time_format)} [{path[idx]['id']}]"
-                )
+                # print(
+                #     f"current : {times[idx].strftime(time_format)} [{path[idx]['id']}]"
+                # )
                 occurrences.append(
                     {
                         "id": path[idx]["id"],

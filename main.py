@@ -13,7 +13,7 @@ CORS(app)
 # forked
 # conn_str = "mongodb+srv://sanketemalasge2:hpe123@cluster0.0iph2l9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
-conn_str =  'mongodb+srv://saiis21:hpe2444@cluster0.vaxb7qe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+conn_str = "mongodb+srv://saiis21:hpe2444@cluster0.vaxb7qe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
 try:
     client = pymongo.MongoClient(conn_str)
@@ -73,13 +73,13 @@ def get_overlaps():
 @app.route("/get_policy_tree", methods=["POST"])
 def get_policy_tree():
     req = request.get_json()
-    print(req)
+    # print(req)
     try:
         jsonData = collection.find_one({"policyName": req["data"]["policy"]})
         # print(jsonData)
     except MongoError as e:
         print(e)
-    print(json.dumps(jsonData, indent=4, default=str))
+    # print(json.dumps(jsonData, indent=4, default=str))
     return jsonify(tree_to_list_format(build_tree(jsonData)))
 
 
@@ -94,18 +94,19 @@ def get_policy_tree():
 #     scheduleCount = projectionCount(data, givenTime=givenTime['givenTime'])
 #     return jsonify(scheduleCount)
 
+
 @app.route("/givenTime", methods=["POST"])
 def projection_count():
     # print(request.get_json())
     givenTime = request.get_json()
-   
-    print('givenTime is: ', givenTime)
+
+    print("givenTime is: ", givenTime)
     try:
-        jsonData = collection.find_one({"policyName":givenTime['policyName']})
+        jsonData = collection.find_one({"policyName": givenTime["policyName"]})
         # print(jsonData)
     except MongoError as e:
         print(e)
-    scheduleCount = projectionCount(jsonData, givenTime=givenTime['givenTime'])
+    scheduleCount = projectionCount(jsonData, givenTime=givenTime["givenTime"])
     return jsonify(scheduleCount)
 
 
@@ -133,10 +134,17 @@ def database():
             # Insert the data into the MongoDB collection
             result = collection.insert_one(data)
             # Return a success message with the inserted ID
-            return jsonify({"message": "Data inserted successfully", "id": str(result.inserted_id)}), 200
+            return (
+                jsonify(
+                    {
+                        "message": "Data inserted successfully",
+                        "id": str(result.inserted_id),
+                    }
+                ),
+                200,
+            )
         else:
             return jsonify({"error": "Policy name is required"}), 400
-
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
