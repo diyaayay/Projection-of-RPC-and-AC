@@ -1,53 +1,53 @@
 .grid {
-    display: flex;
-    flex-direction: column;
-  }
-  .visualization{
-      margin-left: 1.5rem;
-  }
-  
-  .grid-row {
-    display: flex;
-  }
-  
-  .grid-cell {
-    border: 1px solid #ccc;
-    width: 150px; /* Adjust width as needed */
-    height: 50px; /* Adjust height as needed */
-    display: flex;
-    font-size: small;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .header {
-    background-color: #f0f0f0;
-    font-weight: bold;
-  }
-
-  .heading {
-    margin-top: 2%;
-    text-decoration: underline;
+  display: flex;
+  flex-direction: column;
+}
+.visualization {
+  margin-left: 1.5rem;
 }
 
-  /* CSS for tooltip */
-  .tooltip {
-    margin-top: 2rem;
-    position: relative;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: #f2f0f0;
-    font-weight: bold;
-    padding: 5px 10px;
-    border-radius: 5px;
-    z-index: 999;
-    display:none;
-  }
-
-  .grid-cell:hover .tooltip {
-    display: inline; /* Show the tooltip when hovering over a grid cell */
+.grid-row {
+  display: flex;
 }
 
-.hover-info{
+.grid-cell {
+  border: 1px solid #ccc;
+  width: 150px; /* Adjust width as needed */
+  height: 50px; /* Adjust height as needed */
+  display: flex;
+  font-size: small;
+  align-items: center;
+  justify-content: center;
+}
+
+.header {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.heading {
+  margin-top: 2%;
+  text-decoration: underline;
+}
+
+/* CSS for tooltip */
+.tooltip {
+  margin-top: 2rem;
+  position: relative;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #f2f0f0;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 5px;
+  z-index: 999;
+  display: none;
+}
+
+.grid-cell:hover .tooltip {
+  display: inline; /* Show the tooltip when hovering over a grid cell */
+}
+
+.hover-info {
   margin-top: 1%;
   margin-bottom: 1%;
   background-color: rgb(204, 198, 198);
@@ -57,13 +57,12 @@
   border-radius: 3%;
 }
 
-  
 .grid-cell {
-    position: relative; /* Ensure that tooltip is positioned relative to the cell */
-    /* Add any additional styling for the grid cells */
-  }
-  
-  .date-time-input {
+  position: relative; /* Ensure that tooltip is positioned relative to the cell */
+  /* Add any additional styling for the grid cells */
+}
+
+.date-time-input {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -150,4 +149,44 @@
 .circle {
   display: inline-block;
   margin: 2px;
+}
+
+.details {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin-top: 20px;
+  margin-left: 32%;
+}
+
+.heading {
+  text-align: center;
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.detail {
+  background-color: #fff;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  transition: transform 0.2s;
+}
+
+.detail:hover {
+  transform: scale(1.02);
+}
+
+.detail-item {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.label {
+  font-weight: bold;
+  color: #555;
 }
