@@ -8,7 +8,6 @@ import PolicyTree from "../components/PolicyTree";
 import ScatterChart from "../components/ScatterChart";
 
 const Dashboard = () => {
-    const [dateTime, setDateTime] = useState('');
     const [customDate, setCustomDate] = useState('');
     const [resData, setResData] = useState(null);
     const [policyName, setPolicyName] = useState('');
@@ -25,6 +24,7 @@ const Dashboard = () => {
     };
 
     const handleDateTimeChange = (date) => {
+        console.log(date.toISOString());
         const isoString = date.toISOString();
         const customFormattedDateTime = convertToCustomFormat(isoString);
         setCustomDate(customFormattedDateTime);
@@ -50,9 +50,9 @@ const Dashboard = () => {
                 givenTime: customDate,
                 policyName: policyName
             });
-            setProjectionRun(tableRes.data)
+            setProjectionRun(tableRes.data);
         } catch (err) {
-            console.log(err)
+            console.log(err);
         }
     };
 
@@ -61,16 +61,25 @@ const Dashboard = () => {
     };
 
     const projectionRunColors = {
-        SNAPSHOT: ['#87CEEB', '#4682B4'],
-        BACKUP: ['#98FB98', '#3CB371'],
-        CLOUD_BACKUP: ['#FFD700', '#FF8C00']
+        SNAPSHOT: [ '#4682B4','#87CEEB'],
+        BACKUP: [ '#3CB371', '#98FB98',],
+        CLOUD_BACKUP: ['#FF8C00','#FFD700' ]
+    };
+
+    const cardStyle = {
+        flex: '0 0 30%',
+        margin: '0 10px',
+        marginBottom: '20px',
+        minWidth: '300px',
+        maxWidth: '300px',
+        height: '450px',
     };
 
     return (
         <>
             <Navbar />
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', padding: '20px', backgroundColor: '#f5f7fa' }}>
-                <DateTimeForm dateTime={dateTime} handleDateTimeChange={handleDateTimeChange} handleSubmit={handleSubmit} policyName={policyName} handlePolicyNameChange={handlePolicyNameChange} />
+                <DateTimeForm dateTime={customDate} handleDateTimeChange={handleDateTimeChange} handleSubmit={handleSubmit} policyName={policyName} handlePolicyNameChange={handlePolicyNameChange} />
 
                 <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-around', marginTop: '20px', width: '100%' }}>
                     <BackupCard
@@ -81,6 +90,7 @@ const Dashboard = () => {
                         activeTotal={calculateTotalCount(resData?.Active.SNAPSHOT)}
                         projectionColor={projectionRunColors.SNAPSHOT[0]}
                         activeColor={projectionRunColors.SNAPSHOT[1]}
+                        style={cardStyle}
                     />
 
                     <BackupCard
@@ -91,6 +101,7 @@ const Dashboard = () => {
                         activeTotal={calculateTotalCount(resData?.Active.BACKUP)}
                         projectionColor={projectionRunColors.BACKUP[0]}
                         activeColor={projectionRunColors.BACKUP[1]}
+                        style={cardStyle}
                     />
 
                     <BackupCard
@@ -101,30 +112,41 @@ const Dashboard = () => {
                         activeTotal={calculateTotalCount(resData?.Active.CLOUD_BACKUP)}
                         projectionColor={projectionRunColors.CLOUD_BACKUP[0]}
                         activeColor={projectionRunColors.CLOUD_BACKUP[1]}
+                        style={cardStyle}
                     />
+                </div>
 
+                <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'nowrap', justifyContent: 'space-between', marginTop: '20px', width: '100%' }}>
                     <CostAndSizeCard
-                        title="Cost and Size - Array Snapshots"
+                        title="Array Snapshots"
                         costAndSizeData={Object.fromEntries(Object.entries(resData?.CostAndSize || {}).filter(([key, value]) => value.type === 'SNAPSHOT'))}
-                        pieChartColors={projectionRunColors.SNAPSHOT}
+                        pieChartColors={[projectionRunColors.SNAPSHOT[0], projectionRunColors.SNAPSHOT[1]]}
+                        style={cardStyle}
+                        givenTime={customDate}
+                        activeCount={calculateTotalCount(resData?.Active.SNAPSHOT)}
                     />
 
                     <CostAndSizeCard
-                        title="Cost and Size - On-Premises Backups"
+                        title="On-Premises Backups"
                         costAndSizeData={Object.fromEntries(Object.entries(resData?.CostAndSize || {}).filter(([key, value]) => value.type === 'BACKUP'))}
-                        pieChartColors={projectionRunColors.BACKUP}
+                        pieChartColors={[projectionRunColors.BACKUP[0], projectionRunColors.BACKUP[1]]}
+                        style={cardStyle}
+                        givenTime={customDate}
+                        activeCount={calculateTotalCount(resData?.Active.BACKUP)}
                     />
 
                     <CostAndSizeCard
-                        title="Cost and Size - Cloud Backups"
+                        title="Cloud Backups"
                         costAndSizeData={Object.fromEntries(Object.entries(resData?.CostAndSize || {}).filter(([key, value]) => value.type === 'CLOUD_BACKUP'))}
-                        pieChartColors={projectionRunColors.CLOUD_BACKUP}
+                        pieChartColors={[projectionRunColors.CLOUD_BACKUP[0], projectionRunColors.CLOUD_BACKUP[1]]}
+                        style={cardStyle}
+                        givenTime={customDate}
+                        activeCount={calculateTotalCount(resData?.Active.CLOUD_BACKUP)}
                     />
                 </div>
             </div>
             <div><ScatterChart data={projectionRun} /></div>
             {policyName ? <div><PolicyTree policy={policyName} /></div> : <h2>Policy Tree</h2>}
-
         </>
     );
 };
